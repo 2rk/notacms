@@ -1,3 +1,7 @@
+#menu {
+    width: 100px
+}
+
 .ui-dialog .ui-dialog-titlebar-minimize {
     position: absolute;
     right: .3em;

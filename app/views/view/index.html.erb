@@ -10,27 +10,34 @@
   <script src="/assets/jquery.taskbar.js"></script>
   <script>
       $(function () {
-          var i = 1;
-          $("#makedlg").click(function () {
+
+          $('#menu').menu();
+//          var i = 1;
+          $(".makedlg").click(function (event) {
+              var i = event.currentTarget.id;
+
+              if ($('#dialog' + i).taskbardialog('isOpen') === true) {
+                  return
+              }
               a = $("#dialog").clone().attr("id", "dialog" + i)
-              var url = 'pages/'+i+'.json';
+              var url = 'pages/' + i + '.json';
               $.getJSON(url, function (data) {
-                  a.attr("title",  data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
+                  a.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
                       taskbar: "#taskbar",
                       height: data.height,
                       width: data.width,
-                      position: [data.left,data.top],
+                      position: [data.left, data.top],
                       dragStop: function (event, ui) {
                           var pos_id = $(this).data('position_id');
-                              console.log("dragStop", ui.position.left)
-                          $.ajax({url: 'positions/'+pos_id+'.json', type: "PUT", data: { position: {top: ui.position.top , left: ui.position.left}}})
-                          },
+                          console.log("dragStop", ui.position.left)
+                          $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {top: ui.position.top, left: ui.position.left}}})
+                      },
                       resizeStop: function (event, ui) {
                           var pos_id = $(this).data('position_id');
-                              console.log("resizeStop", ui.size)
+                          console.log("resizeStop", ui.size)
                           console.log(ui)
-                          $.ajax({url: 'positions/'+pos_id+'.json', type: "PUT", data: { position: {width: ui.size.width , height: ui.size.height}}})
-                          }
+                          $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {width: ui.size.width, height: ui.size.height}}})
+                      }
 
 
 
@@ -40,7 +47,7 @@
 
               console.log($("#dialog" + i).taskbardialog("option", "title"));
               console.log(a.position());
-              i++;
+//              i++;
 
           });
           $('#meme').click(function () {
@@ -67,13 +74,20 @@
 </head>
 <body>
 cookie = <%= @cookie %>
-<label for="makedlg"></label><input type="button" id="makedlg" value="click me"/>
-<label for="meme"></label><input type="button" id="meme" value="ajax"/>
+<label for="makedlg"></label>
 
+<ul id='menu'>
 
-<div id="memebox">
-  hello
-</div>
+  <li><a href='#'>Start</a>
+    <ul>
+      <li><a href='#' class="makedlg" id='1'>Page 1</a></li>
+      <li><a href='#' class="makedlg" id='2'>Page 2</a></li>
+      <li><a href='#' class="makedlg" id='3'>Page 3</a></li>
+      <li><a href='#' class="makedlg" id='4'>Page 4</a></li>
+      <li><a href='#' class="makedlg" id='5'>Page 5</a></li>
+    </ul>
+  </li>
+</ul>
 
 <div id="dialog" class="buzzilla" title="buzzilla dialog" style="display: none">
 </div>
