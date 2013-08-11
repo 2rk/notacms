@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" type="text/css" href="/assets/smoothness/jquery-ui-1.10.3.custom.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/jquery.taskbar.css"/>
+
+  <script src="/assets/jquery-1.9.1.js"></script>
+  <script src="/assets/jquery-ui-1.10.3.custom.js"></script>
+  <script src="/assets/jquery.taskbar.js"></script>
+  <script>
+      $(function () {
+          var i = 1;
+          $("#makedlg").click(function () {
+              a = $("#dialog").clone().attr("id", "dialog" + i)
+              $.get('pages/'+i+'.json', function (data) {
+                  a.attr("title",  data.title).append(data.content).taskbardialog({
+                      taskbar: "#taskbar",
+//                      position: [100,20],
+//                      height: 400,
+//                      width: 800,
+                      position: data.position.split(",").map( function(item) {
+                          return parseInt(item, 10)
+                      }),
+                      dragStop: function (event) {
+                              console.log("dragStop", event)
+                          }
+
+
+
+//                      position: ["100","50"]
+                  });
+              });
+
+              console.log($("#dialog" + i).taskbardialog("option", "title"));
+              console.log(a.position());
+              i++;
+
+          });
+          $('#meme').click(function () {
+              $.get('pages/1.json', function (data) {
+//                          console.log(data);
+                          $("#memebox").dialog({
+                              title: data.title
+
+
+
+                          });
+                      }
+              );
+          })
+      });
+  </script>
+  <style type="text/css">
+      body {
+          margin: 0;
+          padding: 0;
+
+      }
+  </style>
+</head>
+<body>
+<label for="makedlg"></label><input type="button" id="makedlg" value="click me"/>
+<label for="meme"></label><input type="button" id="meme" value="ajax"/>
+
+
+<div id="memebox">
+  hello
+</div>
+
+<div id="dialog" class="buzzilla" title="buzzilla dialog" style="display: none">
+</div>
+
+<div id="taskbar" style="width: 220px; position:relative; float:right; z-index: 3000; border: 1px solid black">
+  Taskbar
+</div>
+</body>
+</html>

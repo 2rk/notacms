@@ -1,4 +1,10 @@
 Notacms::Application.routes.draw do
+
+
+  resources :pages
+
+
+  root to: 'view#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
