@@ -2,6 +2,21 @@
     width: 100px
 }
 
+body {
+    background-color: lightcoral;
+}
+
+h2 {
+    text-align: center;
+    /*display: inline;*/
+}
+
+.taskbar {
+    color: darkblue;
+    font-size: 18px;
+    font-weight: bold;
+}
+
 .ui-dialog .ui-dialog-titlebar-minimize {
     position: absolute;
     right: .3em;

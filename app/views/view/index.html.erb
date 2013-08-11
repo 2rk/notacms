@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <link rel="stylesheet" type="text/css" href="/assets/smoothness/jquery-ui-1.10.3.custom.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/start/jquery-ui-1.10.3.custom.css"/>
   <link rel="stylesheet" type="text/css" href="/assets/jquery.taskbar.css"/>
 
   <script src="/assets/jquery-1.9.1.js"></script>
@@ -73,17 +73,17 @@
   </style>
 </head>
 <body>
-<label for="makedlg"></label>
+
 
 <ul id='menu'>
 
   <li><a href='#'>Start</a>
     <ul>
-      <li><a href='#' class="makedlg" id='1'>Page 1</a></li>
-      <li><a href='#' class="makedlg" id='2'>Page 2</a></li>
-      <li><a href='#' class="makedlg" id='3'>Page 3</a></li>
-      <li><a href='#' class="makedlg" id='4'>Page 4</a></li>
-      <li><a href='#' class="makedlg" id='5'>Page 5</a></li>
+      <li><a href='#' class="makedlg" id='1'>Home</a></li>
+      <li><a href='#' class="makedlg" id='2'>About Us</a></li>
+      <li><a href='#' class="makedlg" id='3'>Contact</a></li>
+      <li><a href='#' class="makedlg" id='4'>Products</a></li>
+      <li><a href='#' class="makedlg" id='5'>Our Staff</a></li>
     </ul>
   </li>
 </ul>
@@ -92,7 +92,8 @@
 </div>
 
 <div id="taskbar" style="width: 220px; position:relative; float:right; z-index: 3000; border: 1px solid black">
-  Taskbar (cookie <%= @cookie %>)
+  <span class="taskbar">Taskbar (cookie <%= @cookie %>)</span>
 </div>
+<h2>airpark.local:3000  or 192.168.88.245:3000</h2>
 </body>
 </html>
