@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Page:
+  = @position.page
+%p
+  %b User:
+  = @position.user_id
+%p
+  %b Top:
+  = @position.top
+%p
+  %b Left:
+  = @position.left
+%p
+  %b Width:
+  = @position.width
+%p
+  %b Height:
+  = @position.height
+%p
+  %b Minimised:
+  = @position.minimised
+
+= link_to 'Edit', edit_position_path(@position)
+\|
+= link_to 'Back', positions_path

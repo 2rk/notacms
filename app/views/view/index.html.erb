@@ -13,17 +13,23 @@
           var i = 1;
           $("#makedlg").click(function () {
               a = $("#dialog").clone().attr("id", "dialog" + i)
-              $.get('pages/'+i+'.json', function (data) {
-                  a.attr("title",  data.title).append(data.content).taskbardialog({
+              var url = 'pages/'+i+'.json';
+              $.getJSON(url, function (data) {
+                  a.attr("title",  data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
                       taskbar: "#taskbar",
-//                      position: [100,20],
-//                      height: 400,
-//                      width: 800,
-                      position: data.position.split(",").map( function(item) {
-                          return parseInt(item, 10)
-                      }),
-                      dragStop: function (event) {
-                              console.log("dragStop", event)
+                      height: data.height,
+                      width: data.width,
+                      position: [data.left,data.top],
+                      dragStop: function (event, ui) {
+                          var pos_id = $(this).data('position_id');
+                              console.log("dragStop", ui.position.left)
+                          $.ajax({url: 'positions/'+pos_id+'.json', type: "PUT", data: { position: {top: ui.position.top , left: ui.position.left}}})
+                          },
+                      resizeStop: function (event, ui) {
+                          var pos_id = $(this).data('position_id');
+                              console.log("resizeStop", ui.size)
+                          console.log(ui)
+                          $.ajax({url: 'positions/'+pos_id+'.json', type: "PUT", data: { position: {width: ui.size.width , height: ui.size.height}}})
                           }
 
 
@@ -60,6 +66,7 @@
   </style>
 </head>
 <body>
+cookie = <%= @cookie %>
 <label for="makedlg"></label><input type="button" id="makedlg" value="click me"/>
 <label for="meme"></label><input type="button" id="meme" value="ajax"/>
 

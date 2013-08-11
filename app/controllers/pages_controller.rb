@@ -13,10 +13,25 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.json
   def show
+
+    #Rails.logger.info "cookie #{cookies[:notacms]}"
     @page = Page.find_by_id(params[:id])
 
-    @page ||= Page.new(content: 'Page content not found', title: 'Page not found')
-    render json: @page.to_json
+    @page ||= Page.new(content: 'Page content not found', title: 'Page not found', top: 100, left: 100, width: 200, height: 200)
+
+    #render json: @page.attributes.merge(follower_id: 45).to_json
+
+    @position = @page.positions.find_by_user_id(cookies[:notacms])
+    if @position
+      Rails.logger.info('found position')
+      @page.left = @position.left
+      @page.top = @position.top
+      @page.width = @position.width
+      @page.height = @position.height
+    else
+      @position = @page.positions.create(user_id: cookies[:notacms], left: @page.left, top: @page.top, width: @page.width, height: @page.height)
+    end
+    render json: @page.attributes.merge(position_id: @position.id).to_json
 
     #respond_to do |format|
     #  format.html # show.html.erb

@@ -2,18 +2,26 @@
 
 %table
   %tr
+    %th ID
     %th Title
     %th Content
-    %th Position
+    %th top
+    %th left
+    %th width
+    %th height
     %th
     %th
     %th
 
   - @pages.each do |page|
     %tr
+      %td= page.id
       %td= page.title
       %td= page.content
-      %td= page.position
+      %td= page.top
+      %td= page.left
+      %td= page.width
+      %td= page.height
       %td= link_to 'Show', page
       %td= link_to 'Edit', edit_page_path(page)
       %td= link_to 'Destroy', page, :method => :delete, :data => { :confirm => 'Are you sure?' }

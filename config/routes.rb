@@ -1,6 +1,12 @@
 Notacms::Application.routes.draw do
 
 
+  resources :positions
+
+
+  resources :users
+
+
   resources :pages
 
 

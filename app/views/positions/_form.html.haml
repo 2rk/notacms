@@ -1,0 +1,31 @@
+= form_for @position do |f|
+  - if @position.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@position.errors.count, "error")} prohibited this position from being saved:"
+      %ul
+        - @position.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :page
+    = f.text_field :page
+  .field
+    = f.label :user_id
+    = f.text_field :user_id
+  .field
+    = f.label :top
+    = f.number_field :top
+  .field
+    = f.label :left
+    = f.number_field :left
+  .field
+    = f.label :width
+    = f.number_field :width
+  .field
+    = f.label :height
+    = f.number_field :height
+  .field
+    = f.label :minimised
+    = f.check_box :minimised
+  .actions
+    = f.submit 'Save'

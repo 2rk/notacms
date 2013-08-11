@@ -11,12 +11,37 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130810080613) do
+ActiveRecord::Schema.define(:version => 20130811034308) do
 
   create_table "pages", :force => true do |t|
     t.string   "title"
     t.text     "content"
-    t.string   "position"
+    t.integer  "top"
+    t.integer  "left"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "positions", :force => true do |t|
+    t.integer  "page_id"
+    t.integer  "user_id"
+    t.integer  "top"
+    t.integer  "left"
+    t.integer  "width"
+    t.integer  "height"
+    t.boolean  "minimised"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "positions", ["page_id"], :name => "index_positions_on_page_id"
+  add_index "positions", ["user_id"], :name => "index_positions_on_user_id"
+
+  create_table "users", :force => true do |t|
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
