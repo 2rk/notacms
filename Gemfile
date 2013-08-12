@@ -41,7 +41,7 @@ gem "haml-rails"
 
 group :test, :development do
   gem 'factory_girl_rails'
-  gem 'zeus'
+  gem 'zeus', '0.13.4.pre2'
 
   gem 'fracture', '~> 0.10.1'
   gem "rspec-rails"
