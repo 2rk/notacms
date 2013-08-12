@@ -9,6 +9,8 @@ Notacms::Application.routes.draw do
 
   resources :pages
 
+  resources :views, only: :index
+
 
   root to: 'view#index'
   # The priority is based upon order of creation:

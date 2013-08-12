@@ -40,6 +40,7 @@ gem 'jquery-rails'
 gem "haml-rails"
 
 group :test, :development do
+  gem 'factory_girl_rails'
   gem 'zeus'
 
   gem 'fracture', '~> 0.10.1'
