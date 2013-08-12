@@ -15,7 +15,7 @@ describe Page do
       context 'page found' do
         context 'no position' do
           it { expect { Page.get_page(page.id, user.id) }.to change(Position, :count).by(1) }
-          context 'a' do
+          context 'get_page' do
             subject { Page.get_page(page.id, user.id) }
             its(:user) { should == user }
             its(:page) { should == page }
