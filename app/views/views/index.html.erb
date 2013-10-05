@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" type="text/css" href="/assets/start/jquery-ui-1.10.3.custom.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/jquery.taskbar.css"/>
+
+  <script src="/assets/jquery-1.9.1.js"></script>
+  <script src="/assets/jquery-ui-1.10.3.custom.js"></script>
+  <script src="/assets/jquery.taskbar.js"></script>
+  <script>
+      $(function () {
+
+          var pages = [];
+
+          <% @pages.each do |page| %>
+            pages.push(<%= page.toJSON %>)
+          <% end %>
+
+          pages.forEach(function(page) {
+              createWindow(page)
+          });
+
+          $('#menu').menu();
+//          var i = 1;
+          function createWindow(data) {
+              a.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
+                  taskbar: "#taskbar",
+                  height: data.height,
+                  width: data.width,
+                  position: [data.left, data.top],
+                  dragStop: function (event, ui) {
+                      var pos_id = $(this).data('position_id');
+                      console.log("dragStop", ui.position.left)
+                      $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {top: ui.position.top, left: ui.position.left}}})
+                  },
+                  resizeStop: function (event, ui) {
+                      var pos_id = $(this).data('position_id');
+                      console.log("resizeStop", ui.size)
+                      console.log(ui)
+                      $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {width: ui.size.width, height: ui.size.height}}})
+                  }
+
+
+
+//                      position: ["100","50"]
+              });
+          }
+
+          $(".makedlg").click(function (event) {
+              var i = event.currentTarget.id;
+
+              if ($('#dialog' + i).taskbardialog('isOpen') === true) {
+                  return
+              }
+              a = $("#dialog").clone().attr("id", "dialog" + i)
+              var url = 'pages/' + i + '.json';
+              $.getJSON(url, function (data) {
+                  createWindow(data);
+              });
+
+              console.log($("#dialog" + i).taskbardialog("option", "title"));
+              console.log(a.position());
+//              i++;
+
+          });
+          $('#meme').click(function () {
+              $.get('pages/1.json', function (data) {
+//                          console.log(data);
+                          $("#memebox").dialog({
+                              title: data.title
+
+
+
+                          });
+                      }
+              );
+          })
+      });
+  </script>
+  <style type="text/css">
+      body {
+          margin: 0;
+          padding: 0;
+
+      }
+  </style>
+</head>
+<body>
+
+
+<ul id='menu'>
+
+  <li><a href='#'>Start</a>
+    <ul>
+      <li><a href='#' class="makedlg" id='1'>Home</a></li>
+      <li><a href='#' class="makedlg" id='2'>About Us</a></li>
+      <li><a href='#' class="makedlg" id='3'>Contact</a></li>
+      <li><a href='#' class="makedlg" id='4'>Products</a></li>
+      <li><a href='#' class="makedlg" id='5'>Our Staff</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div id="dialog" class="buzzilla" title="buzzilla dialog" style="display: none">
+</div>
+
+<div id="taskbar" style="width: 220px; position:relative; float:right; z-index: 3000; border: 1px solid black">
+  <span class="taskbar">Taskbar (cookie <%= @cookie %>)</span>
+</div>
+<h2>airpark.local:3000  or 192.168.88.245:3000</h2>
+</body>
+</html>
