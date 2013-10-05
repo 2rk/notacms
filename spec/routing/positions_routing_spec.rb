@@ -2,34 +2,13 @@ require "spec_helper"
 
 describe PositionsController do
   describe "routing" do
+    it('#update') { put('/positions/1').should route_to('positions#update', id: '1') }
 
-    it "routes to #index" do
-      get("/positions").should route_to("positions#index")
-    end
-
-    it "routes to #new" do
-      get("/positions/new").should route_to("positions#new")
-    end
-
-    it "routes to #show" do
-      get("/positions/1").should route_to("positions#show", :id => "1")
-    end
-
-    it "routes to #edit" do
-      get("/positions/1/edit").should route_to("positions#edit", :id => "1")
-    end
-
-    it "routes to #create" do
-      post("/positions").should route_to("positions#create")
-    end
-
-    it "routes to #update" do
-      put("/positions/1").should route_to("positions#update", :id => "1")
-    end
-
-    it "routes to #destroy" do
-      delete("/positions/1").should route_to("positions#destroy", :id => "1")
-    end
-
+    it('#index') { get('/positions').should_not be_routable }
+    it('#new') { get('/positions/new').should_not be_routable }
+    it('#show') { get('/positions/1').should_not be_routable }
+    it('#edit') { get('/positions/1/edit').should_not be_routable }
+    it('#create') { post('/positions').should_not be_routable }
+    it('#destroy') { delete('/positions/1').should_not be_routable }
   end
 end

@@ -13,7 +13,8 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.json
   def show
-    render json: (Page.get_meme params[:id], cookies[:notacms]).to_json
+    @page = Page.get_meme params[:id], cookies[:notacms]
+    render json: @page.to_json
   end
 
   # GET /pages/new

@@ -1,11 +1,9 @@
 Notacms::Application.routes.draw do
 
 
-  resources :positions
-
+  resources :positions, only: :update
 
   resources :users
-
 
   resources :pages
 
