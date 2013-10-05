@@ -4,10 +4,10 @@ FactoryGirl.define do
   factory :position do
     page
     user
-    top     10
-    left    20
-    width   30
-    height  40
+    top     100
+    left    200
+    width   300
+    height  400
 
   end
 end

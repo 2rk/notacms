@@ -24,27 +24,30 @@
           $('#menu').menu();
 //          var i = 1;
           function createWindow(data) {
-              a.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
-                  taskbar: "#taskbar",
-                  height: data.height,
-                  width: data.width,
-                  position: [data.left, data.top],
-                  dragStop: function (event, ui) {
-                      var pos_id = $(this).data('position_id');
-                      console.log("dragStop", ui.position.left)
-                      $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {top: ui.position.top, left: ui.position.left}}})
-                  },
-                  resizeStop: function (event, ui) {
-                      var pos_id = $(this).data('position_id');
-                      console.log("resizeStop", ui.size)
-                      console.log(ui)
-                      $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {width: ui.size.width, height: ui.size.height}}})
-                  }
-
-
-
-//                      position: ["100","50"]
-              });
+              console.log(data);
+              if (data == null) {
+                  $(location).attr('href', '/views');
+              }
+              else
+              {
+                  a.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
+                      taskbar: "#taskbar",
+                      height: data.height,
+                      width: data.width,
+                      position: [data.left, data.top],
+                      dragStop: function (event, ui) {
+                          var pos_id = $(this).data('position_id');
+                          console.log("dragStop", ui.position.left)
+                          $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {top: ui.position.top, left: ui.position.left}}})
+                      },
+                      resizeStop: function (event, ui) {
+                          var pos_id = $(this).data('position_id');
+                          console.log("resizeStop", ui.size)
+                          console.log(ui)
+                          $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {width: ui.size.width, height: ui.size.height}}})
+                      }
+                  });
+              }
           }
 
           $(".makedlg").click(function (event) {
