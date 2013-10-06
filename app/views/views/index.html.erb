@@ -14,10 +14,11 @@
           var pages = [];
 
           <% @pages.each do |page| %>
-            pages.push(<%= page.toJSON %>)
+            pages.push(<%= page.to_json.to_s.html_safe %>)
           <% end %>
 
           pages.forEach(function(page) {
+              a = $("#dialog").clone().attr("id", "dialog" + page.id)
               createWindow(page)
           });
 
