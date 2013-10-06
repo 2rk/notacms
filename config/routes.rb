@@ -5,7 +5,7 @@ Notacms::Application.routes.draw do
 
   resources :users
 
-  resources :pages
+  resources :contents
 
   resources :views, only: :index
 

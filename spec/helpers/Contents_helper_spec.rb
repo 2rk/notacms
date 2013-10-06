@@ -10,5 +10,5 @@ require 'spec_helper'
 #     end
 #   end
 # end
-describe PagesHelper do
+describe ContentsHelper do
 end

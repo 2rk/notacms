@@ -55,6 +55,6 @@ RSpec.configure do |config|
 
     click_button "Sign in"
 
-    page.should have_content("Signed in successfully.") unless options[:dont_test_signed_in_successfully]
+    content.should have_content("Signed in successfully.") unless options[:dont_test_signed_in_successfully]
   end
 end

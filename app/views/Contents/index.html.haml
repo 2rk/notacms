@@ -1,0 +1,31 @@
+%h1 Listing contents
+
+%table
+  %tr
+    %th ID
+    %th Title
+    -#%th Content
+    %th top
+    %th left
+    %th width
+    %th height
+    %th
+    %th
+    %th
+
+  - @contents.each do |content|
+    %tr
+      %td= content.id
+      %td= content.title
+      -#%td= content.content
+      %td= content.top
+      %td= content.left
+      %td= content.width
+      %td= content.height
+      %td= link_to 'Show', content
+      %td= link_to 'Edit', edit_content_path(content)
+      %td= link_to 'Destroy', content, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Page', new_content_path

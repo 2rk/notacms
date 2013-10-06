@@ -1,6 +1,6 @@
 class CreatePages < ActiveRecord::Migration
   def change
-    create_table :pages do |t|
+    create_table :contents do |t|
       t.string :title
       t.text :content
       t.integer :top

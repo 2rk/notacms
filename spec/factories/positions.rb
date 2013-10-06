@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :position do
-    page
+    content
     user
     top     100
     left    200

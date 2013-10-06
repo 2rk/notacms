@@ -11,9 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130811034308) do
+ActiveRecord::Schema.define(:version => 20131006232539) do
 
-  create_table "pages", :force => true do |t|
+  create_table "contents", :force => true do |t|
     t.string   "title"
     t.text     "content"
     t.integer  "top"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(:version => 20130811034308) do
   end
 
   create_table "positions", :force => true do |t|
-    t.integer  "page_id"
+    t.integer  "content_id"
     t.integer  "user_id"
     t.integer  "top"
     t.integer  "left"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(:version => 20130811034308) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "positions", ["page_id"], :name => "index_positions_on_page_id"
+  add_index "positions", ["content_id"], :name => "index_positions_on_page_id"
   add_index "positions", ["user_id"], :name => "index_positions_on_user_id"
 
   create_table "users", :force => true do |t|

@@ -962,8 +962,8 @@ $.widget("ui.mouse", {
 
 	_mouseDistanceMet: function(event) {
 		return (Math.max(
-				Math.abs(this._mouseDownEvent.pageX - event.pageX),
-				Math.abs(this._mouseDownEvent.pageY - event.pageY)
+				Math.abs(this._mouseDownEvent.contentX - event.contentX),
+				Math.abs(this._mouseDownEvent.contentY - event.contentY)
 			) >= this.options.distance
 		);
 	},
@@ -1026,7 +1026,7 @@ function getDimensions( elem ) {
 		return {
 			width: 0,
 			height: 0,
-			offset: { top: raw.pageY, left: raw.pageX }
+			offset: { top: raw.contentY, left: raw.contentX }
 		};
 	}
 	return {
@@ -1584,7 +1584,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.offsetParent = this.helper.offsetParent();
 		this.offsetParentCssPosition = this.offsetParent.css( "position" );
 
-		//The element's absolute position on the page minus margins
+		//The element's absolute position on the content minus margins
 		this.offset = this.positionAbs = this.element.offset();
 		this.offset = {
 			top: this.offset.top - this.margins.top,
@@ -1596,8 +1596,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
-				left: event.pageX - this.offset.left,
-				top: event.pageY - this.offset.top
+				left: event.contentX - this.offset.left,
+				top: event.contentY - this.offset.top
 			},
 			parent: this._getParentOffset(),
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
@@ -1605,8 +1605,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		//Generate the original position
 		this.originalPosition = this.position = this._generatePosition(event);
-		this.originalPageX = event.pageX;
-		this.originalPageY = event.pageY;
+		this.originalPageX = event.contentX;
+		this.originalPageY = event.contentY;
 
 		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
 		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
@@ -1791,7 +1791,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			po.top += this.scrollParent.scrollTop();
 		}
 
-		//This needs to be actually done for all browsers, since pageX/pageY includes this information
+		//This needs to be actually done for all browsers, since contentX/contentY includes this information
 		//Ugly IE fix
 		if((this.offsetParent[0] === document.body) ||
 			(this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() === "html" && $.ui.ie)) {
@@ -1928,8 +1928,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		var containment, co, top, left,
 			o = this.options,
 			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent,
-			pageX = event.pageX,
-			pageY = event.pageY;
+			contentX = event.contentX,
+			contentY = event.contentY;
 
 		//Cache the scroll
 		if (!this.offset.scroll) {
@@ -1957,41 +1957,41 @@ $.widget("ui.draggable", $.ui.mouse, {
 					containment = this.containment;
 				}
 
-				if(event.pageX - this.offset.click.left < containment[0]) {
-					pageX = containment[0] + this.offset.click.left;
+				if(event.contentX - this.offset.click.left < containment[0]) {
+					contentX = containment[0] + this.offset.click.left;
 				}
-				if(event.pageY - this.offset.click.top < containment[1]) {
-					pageY = containment[1] + this.offset.click.top;
+				if(event.contentY - this.offset.click.top < containment[1]) {
+					contentY = containment[1] + this.offset.click.top;
 				}
-				if(event.pageX - this.offset.click.left > containment[2]) {
-					pageX = containment[2] + this.offset.click.left;
+				if(event.contentX - this.offset.click.left > containment[2]) {
+					contentX = containment[2] + this.offset.click.left;
 				}
-				if(event.pageY - this.offset.click.top > containment[3]) {
-					pageY = containment[3] + this.offset.click.top;
+				if(event.contentY - this.offset.click.top > containment[3]) {
+					contentY = containment[3] + this.offset.click.top;
 				}
 			}
 
 			if(o.grid) {
 				//Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
-				top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
-				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+				top = o.grid[1] ? this.originalPageY + Math.round((contentY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
+				contentY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
 
-				left = o.grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
-				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				left = o.grid[0] ? this.originalPageX + Math.round((contentX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
+				contentX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
 			}
 
 		}
 
 		return {
 			top: (
-				pageY -																	// The absolute mouse position
+				contentY -																	// The absolute mouse position
 				this.offset.click.top	-												// Click offset (relative to the element)
 				this.offset.relative.top -												// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.top +												// The offsetParent's offset without borders (offset + border)
 				( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : this.offset.scroll.top )
 			),
 			left: (
-				pageX -																	// The absolute mouse position
+				contentX -																	// The absolute mouse position
 				this.offset.click.left -												// Click offset (relative to the element)
 				this.offset.relative.left -												// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.left +												// The offsetParent's offset without borders (offset + border)
@@ -2048,7 +2048,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					instance: sortable,
 					shouldRevert: sortable.options.revert
 				});
-				sortable.refreshPositions();	// Call the sortable's refreshPositions at drag start to refresh the containerCache since the sortable container cache is used in drag and needs to be up to date (this will ensure it's initialised as well as being kept in step with any changes that might have happened on the page).
+				sortable.refreshPositions();	// Call the sortable's refreshPositions at drag start to refresh the containerCache since the sortable container cache is used in drag and needs to be up to date (this will ensure it's initialised as well as being kept in step with any changes that might have happened on the content).
 				sortable._trigger("activate", event, uiSortable);
 			}
 		});
@@ -2238,17 +2238,17 @@ $.ui.plugin.add("draggable", "scroll", {
 		if(i.scrollParent[0] !== document && i.scrollParent[0].tagName !== "HTML") {
 
 			if(!o.axis || o.axis !== "x") {
-				if((i.overflowOffset.top + i.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity) {
+				if((i.overflowOffset.top + i.scrollParent[0].offsetHeight) - event.contentY < o.scrollSensitivity) {
 					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop + o.scrollSpeed;
-				} else if(event.pageY - i.overflowOffset.top < o.scrollSensitivity) {
+				} else if(event.contentY - i.overflowOffset.top < o.scrollSensitivity) {
 					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
 				}
 			}
 
 			if(!o.axis || o.axis !== "y") {
-				if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity) {
+				if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.contentX < o.scrollSensitivity) {
 					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
-				} else if(event.pageX - i.overflowOffset.left < o.scrollSensitivity) {
+				} else if(event.contentX - i.overflowOffset.left < o.scrollSensitivity) {
 					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;
 				}
 			}
@@ -2256,17 +2256,17 @@ $.ui.plugin.add("draggable", "scroll", {
 		} else {
 
 			if(!o.axis || o.axis !== "x") {
-				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity) {
+				if(event.contentY - $(document).scrollTop() < o.scrollSensitivity) {
 					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
-				} else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity) {
+				} else if($(window).height() - (event.contentY - $(document).scrollTop()) < o.scrollSensitivity) {
 					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
 				}
 			}
 
 			if(!o.axis || o.axis !== "y") {
-				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity) {
+				if(event.contentX - $(document).scrollLeft() < o.scrollSensitivity) {
 					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
-				} else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity) {
+				} else if($(window).width() - (event.contentX - $(document).scrollLeft()) < o.scrollSensitivity) {
 					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 				}
 			}
@@ -2704,7 +2704,7 @@ $.ui.ddmanager = {
 	},
 	drag: function(draggable, event) {
 
-		//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
+		//If you have a highly dynamic content, you might try this option. It renders positions every time you move the mouse.
 		if(draggable.options.refreshPositions) {
 			$.ui.ddmanager.prepareOffsets(draggable, event);
 		}
@@ -3050,7 +3050,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		this.originalSize = this._helper ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
 		this.originalPosition = { left: curleft, top: curtop };
 		this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };
-		this.originalMousePosition = { left: event.pageX, top: event.pageY };
+		this.originalMousePosition = { left: event.contentX, top: event.contentY };
 
 		//Aspect Ratio
 		this.aspectRatio = (typeof o.aspectRatio === "number") ? o.aspectRatio : ((this.originalSize.width / this.originalSize.height) || 1);
@@ -3074,8 +3074,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 			prevLeft = this.position.left,
 			prevWidth = this.size.width,
 			prevHeight = this.size.height,
-			dx = (event.pageX-smp.left)||0,
-			dy = (event.pageY-smp.top)||0,
+			dx = (event.contentX-smp.left)||0,
+			dy = (event.contentY-smp.top)||0,
 			trigger = this._change[a];
 
 		if (!trigger) {
@@ -3789,7 +3789,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 		var that = this,
 			options = this.options;
 
-		this.opos = [event.pageX, event.pageY];
+		this.opos = [event.contentX, event.contentY];
 
 		if (this.options.disabled) {
 			return;
@@ -3802,8 +3802,8 @@ $.widget("ui.selectable", $.ui.mouse, {
 		$(options.appendTo).append(this.helper);
 		// position helper (lasso)
 		this.helper.css({
-			"left": event.pageX,
-			"top": event.pageY,
+			"left": event.contentX,
+			"top": event.contentY,
 			"width": 0,
 			"height": 0
 		});
@@ -3867,8 +3867,8 @@ $.widget("ui.selectable", $.ui.mouse, {
 			options = this.options,
 			x1 = this.opos[0],
 			y1 = this.opos[1],
-			x2 = event.pageX,
-			y2 = event.pageY;
+			x2 = event.contentX,
+			y2 = event.contentY;
 
 		if (x1 > x2) { tmp = x2; x2 = x1; x1 = tmp; }
 		if (y1 > y2) { tmp = y2; y2 = y1; y1 = tmp; }
@@ -4155,7 +4155,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		//Get the next scrolling parent
 		this.scrollParent = this.helper.scrollParent();
 
-		//The element's absolute position on the page minus margins
+		//The element's absolute position on the content minus margins
 		this.offset = this.currentItem.offset();
 		this.offset = {
 			top: this.offset.top - this.margins.top,
@@ -4164,8 +4164,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
-				left: event.pageX - this.offset.left,
-				top: event.pageY - this.offset.top
+				left: event.contentX - this.offset.left,
+				top: event.contentY - this.offset.top
 			},
 			parent: this._getParentOffset(),
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
@@ -4178,8 +4178,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Generate the original position
 		this.originalPosition = this._generatePosition(event);
-		this.originalPageX = event.pageX;
-		this.originalPageY = event.pageY;
+		this.originalPageX = event.contentX;
+		this.originalPageY = event.contentY;
 
 		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
 		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
@@ -4279,29 +4279,29 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.options.scroll) {
 			if(this.scrollParent[0] !== document && this.scrollParent[0].tagName !== "HTML") {
 
-				if((this.overflowOffset.top + this.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity) {
+				if((this.overflowOffset.top + this.scrollParent[0].offsetHeight) - event.contentY < o.scrollSensitivity) {
 					this.scrollParent[0].scrollTop = scrolled = this.scrollParent[0].scrollTop + o.scrollSpeed;
-				} else if(event.pageY - this.overflowOffset.top < o.scrollSensitivity) {
+				} else if(event.contentY - this.overflowOffset.top < o.scrollSensitivity) {
 					this.scrollParent[0].scrollTop = scrolled = this.scrollParent[0].scrollTop - o.scrollSpeed;
 				}
 
-				if((this.overflowOffset.left + this.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity) {
+				if((this.overflowOffset.left + this.scrollParent[0].offsetWidth) - event.contentX < o.scrollSensitivity) {
 					this.scrollParent[0].scrollLeft = scrolled = this.scrollParent[0].scrollLeft + o.scrollSpeed;
-				} else if(event.pageX - this.overflowOffset.left < o.scrollSensitivity) {
+				} else if(event.contentX - this.overflowOffset.left < o.scrollSensitivity) {
 					this.scrollParent[0].scrollLeft = scrolled = this.scrollParent[0].scrollLeft - o.scrollSpeed;
 				}
 
 			} else {
 
-				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity) {
+				if(event.contentY - $(document).scrollTop() < o.scrollSensitivity) {
 					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
-				} else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity) {
+				} else if($(window).height() - (event.contentY - $(document).scrollTop()) < o.scrollSensitivity) {
 					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
 				}
 
-				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity) {
+				if(event.contentX - $(document).scrollLeft() < o.scrollSensitivity) {
 					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
-				} else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity) {
+				} else if($(window).width() - (event.contentX - $(document).scrollLeft()) < o.scrollSensitivity) {
 					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 				}
 
@@ -4939,7 +4939,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			po.top += this.scrollParent.scrollTop();
 		}
 
-		// This needs to be actually done for all browsers, since pageX/pageY includes this information
+		// This needs to be actually done for all browsers, since contentX/contentY includes this information
 		// with an ugly IE fix
 		if( this.offsetParent[0] === document.body || (this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() === "html" && $.ui.ie)) {
 			po = { top: 0, left: 0 };
@@ -5041,8 +5041,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		var top, left,
 			o = this.options,
-			pageX = event.pageX,
-			pageY = event.pageY,
+			contentX = event.contentX,
+			contentY = event.contentY,
 			scroll = this.cssPosition === "absolute" && !(this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		// This is another very weird special case that only happens for relative elements:
@@ -5061,40 +5061,40 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
 
 			if(this.containment) {
-				if(event.pageX - this.offset.click.left < this.containment[0]) {
-					pageX = this.containment[0] + this.offset.click.left;
+				if(event.contentX - this.offset.click.left < this.containment[0]) {
+					contentX = this.containment[0] + this.offset.click.left;
 				}
-				if(event.pageY - this.offset.click.top < this.containment[1]) {
-					pageY = this.containment[1] + this.offset.click.top;
+				if(event.contentY - this.offset.click.top < this.containment[1]) {
+					contentY = this.containment[1] + this.offset.click.top;
 				}
-				if(event.pageX - this.offset.click.left > this.containment[2]) {
-					pageX = this.containment[2] + this.offset.click.left;
+				if(event.contentX - this.offset.click.left > this.containment[2]) {
+					contentX = this.containment[2] + this.offset.click.left;
 				}
-				if(event.pageY - this.offset.click.top > this.containment[3]) {
-					pageY = this.containment[3] + this.offset.click.top;
+				if(event.contentY - this.offset.click.top > this.containment[3]) {
+					contentY = this.containment[3] + this.offset.click.top;
 				}
 			}
 
 			if(o.grid) {
-				top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1];
-				pageY = this.containment ? ( (top - this.offset.click.top >= this.containment[1] && top - this.offset.click.top <= this.containment[3]) ? top : ((top - this.offset.click.top >= this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+				top = this.originalPageY + Math.round((contentY - this.originalPageY) / o.grid[1]) * o.grid[1];
+				contentY = this.containment ? ( (top - this.offset.click.top >= this.containment[1] && top - this.offset.click.top <= this.containment[3]) ? top : ((top - this.offset.click.top >= this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
 
-				left = this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0];
-				pageX = this.containment ? ( (left - this.offset.click.left >= this.containment[0] && left - this.offset.click.left <= this.containment[2]) ? left : ((left - this.offset.click.left >= this.containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				left = this.originalPageX + Math.round((contentX - this.originalPageX) / o.grid[0]) * o.grid[0];
+				contentX = this.containment ? ( (left - this.offset.click.left >= this.containment[0] && left - this.offset.click.left <= this.containment[2]) ? left : ((left - this.offset.click.left >= this.containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
 			}
 
 		}
 
 		return {
 			top: (
-				pageY -																// The absolute mouse position
+				contentY -																// The absolute mouse position
 				this.offset.click.top -													// Click offset (relative to the element)
 				this.offset.relative.top	-											// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.top +												// The offsetParent's offset without borders (offset + border)
 				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ))
 			),
 			left: (
-				pageX -																// The absolute mouse position
+				contentX -																// The absolute mouse position
 				this.offset.click.left -												// Click offset (relative to the element)
 				this.offset.relative.left	-											// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.left +												// The offsetParent's offset without borders (offset + border)
@@ -6097,7 +6097,7 @@ $.widget( "ui.autocomplete", {
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
-		// if the page is unloaded before the widget is destroyed. #7790
+		// if the content is unloaded before the widget is destroyed. #7790
 		this._on( this.window, {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
@@ -6520,14 +6520,14 @@ $.widget( "ui.button", {
 						return;
 					}
 					clickDragged = false;
-					startXPos = event.pageX;
-					startYPos = event.pageY;
+					startXPos = event.contentX;
+					startYPos = event.contentY;
 				})
 				.bind( "mouseup" + this.eventNamespace, function( event ) {
 					if ( options.disabled ) {
 						return;
 					}
-					if ( startXPos !== event.pageX || startYPos !== event.pageY ) {
+					if ( startXPos !== event.contentX || startYPos !== event.contentY ) {
 						clickDragged = true;
 					}
 			});
@@ -6818,7 +6818,7 @@ var PROP_NAME = "datepicker",
 /* Date picker manager.
    Use the singleton instance of this class, $.datepicker, to interact with the date picker.
    Settings for (groups of) date pickers are maintained in an instance object,
-   allowing multiple different settings on the same page. */
+   allowing multiple different settings on the same content. */
 
 function Datepicker() {
 	this._curInst = null; // The current instance in use
@@ -7105,7 +7105,7 @@ $.extend(Datepicker.prototype, {
 		date = (date && date.constructor === Date ? this._formatDate(inst, date) : date);
 		this._dialogInput.val(date);
 
-		this._pos = (pos ? (pos.length ? pos : [pos.pageX, pos.pageY]) : null);
+		this._pos = (pos ? (pos.length ? pos : [pos.contentX, pos.contentY]) : null);
 		if (!this._pos) {
 			browserWidth = document.documentElement.clientWidth;
 			browserHeight = document.documentElement.clientHeight;
@@ -7374,11 +7374,11 @@ $.extend(Datepicker.prototype, {
 				case 33: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
 							-$.datepicker._get(inst, "stepBigMonths") :
 							-$.datepicker._get(inst, "stepMonths")), "M");
-						break; // previous month/year on page up/+ ctrl
+						break; // previous month/year on content up/+ ctrl
 				case 34: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
 							+$.datepicker._get(inst, "stepBigMonths") :
 							+$.datepicker._get(inst, "stepMonths")), "M");
-						break; // next month/year on page down/+ ctrl
+						break; // next month/year on content down/+ ctrl
 				case 35: if (event.ctrlKey || event.metaKey) {
 							$.datepicker._clearDate(event.target);
 						}
@@ -10361,8 +10361,8 @@ $.widget( "ui.progressbar", {
 })( jQuery );
 (function( $, undefined ) {
 
-// number of pages in a slider
-// (how many times can you page up/down to go through the whole range)
+// number of contents in a slider
+// (how many times can you content up/down to go through the whole range)
 var numPages = 5;
 
 $.widget( "ui.slider", $.ui.mouse, {
@@ -10519,7 +10519,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		};
 		this.elementOffset = this.element.offset();
 
-		position = { x: event.pageX, y: event.pageY };
+		position = { x: event.contentX, y: event.contentY };
 		normValue = this._normValueFromMouse( position );
 		distance = this._valueMax() - this._valueMin() + 1;
 		this.handles.each(function( i ) {
@@ -10548,8 +10548,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
-			top: event.pageY - offset.top -
+			left: event.contentX - offset.left - ( closestHandle.width() / 2 ),
+			top: event.contentY - offset.top -
 				( closestHandle.height() / 2 ) -
 				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
 				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
@@ -10568,7 +10568,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_mouseDrag: function( event ) {
-		var position = { x: event.pageX, y: event.pageY },
+		var position = { x: event.contentX, y: event.contentY },
 			normValue = this._normValueFromMouse( position );
 
 		this._slide( event, this._handleIndex, normValue );
@@ -11043,7 +11043,7 @@ $.widget( "ui.spinner", {
 		max: null,
 		min: null,
 		numberFormat: null,
-		page: 10,
+		content: 10,
 		step: 1,
 
 		change: null,
@@ -11067,7 +11067,7 @@ $.widget( "ui.spinner", {
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
-		// if the page is unloaded before the widget is destroyed. #7790
+		// if the content is unloaded before the widget is destroyed. #7790
 		this._on( this.window, {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
@@ -11232,10 +11232,10 @@ $.widget( "ui.spinner", {
 			this._repeat( null, -1, event );
 			return true;
 		case keyCode.PAGE_UP:
-			this._repeat( null, options.page, event );
+			this._repeat( null, options.content, event );
 			return true;
 		case keyCode.PAGE_DOWN:
-			this._repeat( null, -options.page, event );
+			this._repeat( null, -options.content, event );
 			return true;
 		}
 
@@ -11473,12 +11473,12 @@ $.widget( "ui.spinner", {
 		}
 	},
 
-	pageUp: modifier(function( pages ) {
-		this._stepUp( (pages || 1) * this.options.page );
+	contentUp: modifier(function( contents ) {
+		this._stepUp( (contents || 1) * this.options.content );
 	}),
 
-	pageDown: modifier(function( pages ) {
-		this._stepDown( (pages || 1) * this.options.page );
+	contentDown: modifier(function( contents ) {
+		this._stepDown( (contents || 1) * this.options.content );
 	}),
 
 	value: function( newVal ) {
@@ -11705,7 +11705,7 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	// Alt+page up/down moves focus to the previous/next tab (and activates)
+	// Alt+content up/down moves focus to the previous/next tab (and activates)
 	_handlePageNav: function( event ) {
 		if ( event.altKey && event.keyCode === $.ui.keyCode.PAGE_UP ) {
 			this._activate( this._focusNextTab( this.options.active - 1, false ) );

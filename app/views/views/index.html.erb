@@ -11,15 +11,15 @@
   <script>
       $(function () {
 
-          var pages = [];
+          var contents = [];
 
-          <% @pages.each do |page| %>
-            pages.push(<%= page.to_json.to_s.html_safe %>);
+          <% @contents.each do |content| %>
+            contents.push(<%= content.to_json.to_s.html_safe %>);
           <% end %>
 
-          pages.forEach(function(page) {
-              var dialog = $("#dialog").clone().attr("id", "dialog" + page.id);
-              createWindow(page, dialog)
+          contents.forEach(function(content) {
+              var dialog = $("#dialog").clone().attr("id", "dialog" + content.id);
+              createWindow(content, dialog)
           });
 
           $('#menu').menu();
@@ -58,7 +58,7 @@
                   return
               }
               var dialog = $("#dialog").clone().attr("id", "dialog" + i);
-              var url = 'pages/' + i + '.json';
+              var url = 'contents/' + i + '.json';
               $.getJSON(url, function (data) {
                   createWindow(data, dialog);
               });
