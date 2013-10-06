@@ -14,11 +14,11 @@
           var pages = [];
 
           <% @pages.each do |page| %>
-            pages.push(<%= page.to_json.to_s.html_safe %>)
+            pages.push(<%= page.to_json.to_s.html_safe %>);
           <% end %>
 
           pages.forEach(function(page) {
-              var dialog = $("#dialog").clone().attr("id", "dialog" + page.id)
+              var dialog = $("#dialog").clone().attr("id", "dialog" + page.id);
               createWindow(page, dialog)
           });
 
@@ -38,13 +38,13 @@
                       position: [data.left, data.top],
                       dragStop: function (event, ui) {
                           var pos_id = $(this).data('position_id');
-                          console.log("dragStop", ui.position.left)
+                          console.log("dragStop", ui.position.left);
                           $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {top: ui.position.top, left: ui.position.left}}})
                       },
                       resizeStop: function (event, ui) {
                           var pos_id = $(this).data('position_id');
-                          console.log("resizeStop", ui.size)
-                          console.log(ui)
+                          console.log("resizeStop", ui.size);
+                          console.log(ui);
                           $.ajax({url: 'positions/' + pos_id + '.json', type: "PUT", data: { position: {width: ui.size.width, height: ui.size.height}}})
                       }
                   });
@@ -57,7 +57,7 @@
               if ($('#dialog' + i).taskbardialog('isOpen') === true) {
                   return
               }
-              var dialog = $("#dialog").clone().attr("id", "dialog" + i)
+              var dialog = $("#dialog").clone().attr("id", "dialog" + i);
               var url = 'pages/' + i + '.json';
               $.getJSON(url, function (data) {
                   createWindow(data, dialog);
@@ -68,18 +68,6 @@
 //              i++;
 
           });
-          $('#meme').click(function () {
-              $.get('pages/1.json', function (data) {
-//                          console.log(data);
-                          $("#memebox").dialog({
-                              title: data.title
-
-
-
-                          });
-                      }
-              );
-          })
       });
   </script>
   <style type="text/css">
