@@ -18,20 +18,20 @@
           <% end %>
 
           pages.forEach(function(page) {
-              a = $("#dialog").clone().attr("id", "dialog" + page.id)
-              createWindow(page)
+              var dialog = $("#dialog").clone().attr("id", "dialog" + page.id)
+              createWindow(page, dialog)
           });
 
           $('#menu').menu();
 //          var i = 1;
-          function createWindow(data) {
+          function createWindow(data, dialog) {
               console.log(data);
               if (data == null) {
                   $(location).attr('href', '/views');
               }
               else
               {
-                  a.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
+                  dialog.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
                       taskbar: "#taskbar",
                       height: data.height,
                       width: data.width,
@@ -57,14 +57,14 @@
               if ($('#dialog' + i).taskbardialog('isOpen') === true) {
                   return
               }
-              a = $("#dialog").clone().attr("id", "dialog" + i)
+              var dialog = $("#dialog").clone().attr("id", "dialog" + i)
               var url = 'pages/' + i + '.json';
               $.getJSON(url, function (data) {
-                  createWindow(data);
+                  createWindow(data, dialog);
               });
 
               console.log($("#dialog" + i).taskbardialog("option", "title"));
-              console.log(a.position());
+              console.log(dialog.position());
 //              i++;
 
           });
