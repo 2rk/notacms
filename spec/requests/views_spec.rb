@@ -37,4 +37,21 @@ describe "Views" do
       end
     end
   end
+
+  context 'Menus', js: true  do
+    before do
+      menu
+      menu_other
+    end
+    it 'new user' do
+      visit views_path
+      expect(page).not_to have_selector("#dialog#{content.id}")
+    end
+    it 'existing user' do
+      visit views_path
+      click_link 'Start'
+      click_link menu.content_text
+      expect(page).to have_selector("#dialog#{content.id}")
+    end
+  end
 end

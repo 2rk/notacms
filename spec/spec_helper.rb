@@ -24,7 +24,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  #config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
@@ -45,16 +45,41 @@ RSpec.configure do |config|
     Fracture.clear
   end
 
-  def login_as user, options={}
-    options[:password] ||= 'secret'
-    options[:dont_test_signed_in_successfully] ||= false
-    options[:link_path] ||= user_session_path
-    visit options[:link_path]
-    fill_in "Email", with: user.email
-    fill_in "Password", with: options[:password]
+  config.use_transactional_fixtures = false
 
-    click_button "Sign in"
+  config.before(:suite) do
+    DatabaseCleaner.clean_with :truncation
+  end
 
-    content.should have_content("Signed in successfully.") unless options[:dont_test_signed_in_successfully]
+  config.before(:each) do
+    if example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 end
+
+def login_as user, options={}
+  options[:password] ||= 'secret'
+  options[:dont_test_signed_in_successfully] ||= false
+  options[:link_path] ||= user_session_path
+  visit options[:link_path]
+  fill_in "Email", with: user.email
+  fill_in "Password", with: options[:password]
+
+  click_button "Sign in"
+
+  content.should have_content("Signed in successfully.") unless options[:dont_test_signed_in_successfully]
+end
+
+# Add this to stop browser from closing
+#Capybara::Selenium::Driver.class_eval do
+#  def quit; end
+#  def reset!; end
+#end

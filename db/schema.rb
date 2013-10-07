@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20131007010253) do
     t.datetime "updated_at", :null => false
   end
 
-  add_index "positions", ["content_id"], :name => "index_positions_on_page_id"
+  add_index "positions", ["content_id"], :name => "index_positions_on_content_id"
   add_index "positions", ["user_id"], :name => "index_positions_on_user_id"
 
   create_table "users", :force => true do |t|
