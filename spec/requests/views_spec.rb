@@ -42,16 +42,29 @@ describe "Views" do
     before do
       menu
       menu_other
+      User.delete_all
+      visit views_path
     end
-    it 'new user' do
+    it 'create user' do
+      expect(User.count).to eq(1)
+      expect(page).not_to have_selector("#dialog#{content.id}")
       visit views_path
       expect(page).not_to have_selector("#dialog#{content.id}")
     end
-    it 'existing user' do
-      visit views_path
-      click_link 'Start'
-      click_link menu.content_text
-      expect(page).to have_selector("#dialog#{content.id}")
+    context 'click start and menu item' do
+      before do
+        click_link 'Start'
+        click_link menu.content_text
+      end
+      it 'creates window' do
+        expect(page).to have_selector("#dialog#{content.id}")
+      end
+      context 'when page reloaded' do
+        before { visit views_path }
+        it 'returns previously open window' do
+          expect(page).to have_selector("#dialog#{content.id}")
+        end
+      end
     end
   end
 end
