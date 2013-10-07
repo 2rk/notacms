@@ -1,0 +1,17 @@
+%h1 Listing menus
+
+%table
+  %tr
+    %th Parent
+    %th Content
+    %th Name
+
+  - @menus.each do |menu|
+    %tr
+      %td= link_to menu.parent_id, menu_path(menu)
+      %td= menu.content
+      %td= menu.name
+
+%br
+
+= link_to 'New Menu', new_menu_path, id: :new_menu_link

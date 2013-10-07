@@ -4,7 +4,8 @@ class Content < ActiveRecord::Base
 
   PAGE_NOT_FOUND = {top: 100, left: 100, width: 200, height: 100, title: 'Page not found', content: 'Page not found'}
 
-  has_many :positions
+  has_many :positions, dependent: :destroy
+  has_many :menus, dependent: :destroy
 
   def self.get_meme content_id, user_id
     user = User.find_by_id(user_id)

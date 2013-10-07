@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131006232539) do
+ActiveRecord::Schema.define(:version => 20131007010253) do
 
   create_table "contents", :force => true do |t|
     t.string   "title"
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(:version => 20131006232539) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "menus", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "content_id"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "menus", ["content_id"], :name => "index_menus_on_content_id"
 
   create_table "positions", :force => true do |t|
     t.integer  "content_id"

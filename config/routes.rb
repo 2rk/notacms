@@ -1,6 +1,9 @@
 Notacms::Application.routes.draw do
 
 
+  resources :menus
+
+
   resources :positions, only: :update
 
   resources :users

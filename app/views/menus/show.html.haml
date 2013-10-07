@@ -1,0 +1,13 @@
+%p#notice= notice
+
+%p
+  %b Parent:
+  = @menu.parent_id
+%p
+  %b Content:
+  = @menu.content
+%p
+  %b Name:
+  = @menu.name
+
+= link_to 'Edit', edit_menu_path(@menu), id: :edit_menu_link
