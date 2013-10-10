@@ -14,24 +14,22 @@
           var contents = [];
 
           <% @contents.each do |content| %>
-            contents.push(<%= content.to_json.to_s.html_safe %>);
+          contents.push(<%= content.to_json.to_s.html_safe %>);
           <% end %>
 
-          contents.forEach(function(content) {
+          contents.forEach(function (content) {
               var dialog = $("#dialog").clone().attr("id", "dialog" + content.id);
               createWindow(content, dialog)
           });
 
-          $('#menu').menu();
-//          var i = 1;
+          $('#menu').css('position', 'relative').menu().css('z-index', 3000);
           function createWindow(data, dialog) {
               console.log(data);
               if (data == null) {
                   $(location).attr('href', '/views');
               }
-              else
-              {
-                  dialog.attr("title", data.title).data("position_id", data.position_id).append(data.content).taskbardialog({
+              else {
+                  dialog.attr("title", data.title, 'data', 1).data("position_id", data.position_id).append(data.content).taskbardialog({
                       taskbar: "#taskbar",
                       height: data.height,
                       width: data.width,
@@ -65,8 +63,6 @@
 
               console.log($("#dialog" + i).taskbardialog("option", "title"));
               console.log(dialog.position());
-//              i++;
-
           });
       });
   </script>
@@ -74,7 +70,6 @@
       body {
           margin: 0;
           padding: 0;
-
       }
   </style>
 </head>

@@ -23,6 +23,10 @@ describe Menu do
       end
       context 'menu name is set' do
         it { expect(menu.content_text).to eq(menu.name) }
+        it('changes spaces to non breaking spaces') do
+          menu.update_attribute(:name, 'hello world')
+          expect(menu.content_text).to eq('hello&nbsp;world')
+        end
       end
     end
   end
