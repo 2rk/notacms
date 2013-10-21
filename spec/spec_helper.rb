@@ -78,8 +78,8 @@ def login_as user, options={}
   content.should have_content("Signed in successfully.") unless options[:dont_test_signed_in_successfully]
 end
 
-# Add this to stop browser from closing
-#Capybara::Selenium::Driver.class_eval do
-#  def quit; end
-#  def reset!; end
-#end
+#Add this to stop browser from closing
+Capybara::Selenium::Driver.class_eval do
+  def quit; end
+  def reset!; end
+end
